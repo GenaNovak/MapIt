@@ -19,13 +19,6 @@ class CoreDataManager: NSObject{
         options:[NSMigratePersistentStoresAutomaticallyOption: true,
             NSInferMappingModelAutomaticallyOption: true])
     
-    lazy var cities : NSFetchRequest = {
-        let request = NSFetchRequest(entityName: "City")
-        request.sortDescriptors = [NSSortDescriptor(key: "dateCreated", ascending: false)]
-//        let notes = NSFetchedResultsController(fetchRequest: request, managedObjectContext: self.stack.context, sectionNameKeyPath: nil, cacheName: nil)
-        return request
-    }()
-    
     
     final func getAllCities(){
         do{
@@ -39,4 +32,19 @@ class CoreDataManager: NSObject{
         }
         
     }
+    
+    final func getCity(CityName name : String) -> NSPersistentStoreResult?{
+        do {
+            let request = NSFetchRequest(entityName: "City")
+            request.predicate = NSPredicate(format: "name=\(name)")
+            request.sortDescriptors = [NSSortDescriptor(key: "dateCreated", ascending: false)]
+            let results = try self.stack.context.executeRequest(request)
+            return results
+        }catch{
+            Swift.print("\(error) -> \(#function)")
+        }
+        return nil
+    }
+    
+    
 }
