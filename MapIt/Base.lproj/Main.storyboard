@@ -349,6 +349,12 @@
                                                 <action selector="clearData:" target="mXd-rW-8n3" id="Gvb-ku-GCN"/>
                                             </connections>
                                         </menuItem>
+                                        <menuItem title="InitDB" id="9Ie-Uh-Ufo">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="initDBWasPressed:" target="mXd-rW-8n3" id="NlC-ea-vm4"/>
+                                            </connections>
+                                        </menuItem>
                                     </items>
                                 </menu>
                             </menuItem>

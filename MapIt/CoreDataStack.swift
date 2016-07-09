@@ -10,9 +10,11 @@ import Foundation
 import CoreData
 
 class CoreDataStack: CustomStringConvertible {
-  var modelName : String
-  var storeName : String
-var options : [NSObject : AnyObject]?
+    var modelName : String
+    var storeName : String
+    var options : [NSObject : AnyObject]?
+    
+    
 
   init(modelName:String, storeName:String, options: [NSObject : AnyObject]? = nil) {
     self.modelName = modelName

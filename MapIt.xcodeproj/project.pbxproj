@@ -12,6 +12,8 @@
 		5D16EECA1D30E8DF0049CA24 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D16EEC91D30E8DF0049CA24 /* CoreDataStack.swift */; };
 		5D16EED31D30EA6B0049CA24 /* MapIt.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 5D16EED11D30EA6B0049CA24 /* MapIt.xcdatamodeld */; };
 		5D16EED51D30EA7A0049CA24 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D16EED41D30EA7A0049CA24 /* CoreDataManager.swift */; };
+		5D16EED81D30F9070049CA24 /* City+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D16EED61D30F9070049CA24 /* City+CoreDataProperties.swift */; };
+		5D16EED91D30F9070049CA24 /* City.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D16EED71D30F9070049CA24 /* City.swift */; };
 		5D21019D1D2CD4BE008597E8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D21019C1D2CD4BE008597E8 /* AppDelegate.swift */; };
 		5D21019F1D2CD4BE008597E8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D21019E1D2CD4BE008597E8 /* ViewController.swift */; };
 		5D2101A11D2CD4BE008597E8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5D2101A01D2CD4BE008597E8 /* Assets.xcassets */; };
@@ -46,6 +48,8 @@
 		5D16EEC91D30E8DF0049CA24 /* CoreDataStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 		5D16EED21D30EA6B0049CA24 /* MapIt.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = MapIt.xcdatamodel; sourceTree = "<group>"; };
 		5D16EED41D30EA7A0049CA24 /* CoreDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
+		5D16EED61D30F9070049CA24 /* City+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "City+CoreDataProperties.swift"; path = "../City+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		5D16EED71D30F9070049CA24 /* City.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = City.swift; path = ../City.swift; sourceTree = "<group>"; };
 		5D2101991D2CD4BE008597E8 /* MapIt.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MapIt.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5D21019C1D2CD4BE008597E8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5D21019E1D2CD4BE008597E8 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -106,11 +110,29 @@
 		5D16EECB1D30E8E60049CA24 /* Core Data */ = {
 			isa = PBXGroup;
 			children = (
+				5D16EEDA1D30F91A0049CA24 /* Managed Objects */,
 				5D16EEC91D30E8DF0049CA24 /* CoreDataStack.swift */,
 				5D16EED11D30EA6B0049CA24 /* MapIt.xcdatamodeld */,
 				5D16EED41D30EA7A0049CA24 /* CoreDataManager.swift */,
 			);
 			name = "Core Data";
+			sourceTree = "<group>";
+		};
+		5D16EEDA1D30F91A0049CA24 /* Managed Objects */ = {
+			isa = PBXGroup;
+			children = (
+				5D16EEDB1D30F9430049CA24 /* City */,
+			);
+			name = "Managed Objects";
+			sourceTree = "<group>";
+		};
+		5D16EEDB1D30F9430049CA24 /* City */ = {
+			isa = PBXGroup;
+			children = (
+				5D16EED61D30F9070049CA24 /* City+CoreDataProperties.swift */,
+				5D16EED71D30F9070049CA24 /* City.swift */,
+			);
+			name = City;
 			sourceTree = "<group>";
 		};
 		5D2101901D2CD4BE008597E8 = {
@@ -261,6 +283,7 @@
 				5D2101D11D2F893A008597E8 /* XMLDependentIn.swift in Sources */,
 				5DFABEA41D2F9F2900BD1B73 /* XMLParse.swift in Sources */,
 				5D2101CB1D2F868E008597E8 /* XMLDependence.swift in Sources */,
+				5D16EED81D30F9070049CA24 /* City+CoreDataProperties.swift in Sources */,
 				5D2101AF1D2CD57D008597E8 /* XMLRoot.swift in Sources */,
 				5D2101C51D2EDF7B008597E8 /* XMLBasicDependencies.swift in Sources */,
 				5DFABEA61D2FA76F00BD1B73 /* DataParser.swift in Sources */,
@@ -270,6 +293,7 @@
 				5D2101AD1D2CD512008597E8 /* ParserBase.swift in Sources */,
 				5D16EED31D30EA6B0049CA24 /* MapIt.xcdatamodeld in Sources */,
 				5D2101BB1D2ED2FC008597E8 /* XMLConference.swift in Sources */,
+				5D16EED91D30F9070049CA24 /* City.swift in Sources */,
 				5D2101C31D2EDF5F008597E8 /* XMLDependencies.swift in Sources */,
 				5D16EED51D30EA7A0049CA24 /* CoreDataManager.swift in Sources */,
 				5D2101C11D2EDD79008597E8 /* XMLTokens.swift in Sources */,

@@ -20,6 +20,7 @@ class CoreDataManager: NSObject{
             NSInferMappingModelAutomaticallyOption: true])
     
     
+    
     final func getAllCities(){
         do{
             let request = NSFetchRequest(entityName: "City")
@@ -44,6 +45,52 @@ class CoreDataManager: NSObject{
             Swift.print("\(error) -> \(#function)")
         }
         return nil
+    }
+    
+    final func initDBFromCSV(CSVPath path : String, complition : (Bool) -> ()){
+        let taskQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)
+        
+        dispatch_async(taskQueue, {
+            
+            do{
+                
+                let content = try String(contentsOfFile: path, encoding: NSUTF8StringEncoding)
+                let splitedFileContent = content.componentsSeparatedByString("\n")
+                for line in splitedFileContent{
+                    let splitedLine = line.componentsSeparatedByString(",")
+                    if splitedLine.count > 8{
+                        if let city = NSEntityDescription.insertNewObjectForEntityForName("City", inManagedObjectContext: self.stack.context) as? City{
+                            city.locId = Int64(splitedLine[0])!
+                            city.country = splitedLine[1]
+                            city.region = splitedLine[2]
+                            city.country = splitedLine[3]
+                            city.postalCode = Int64(splitedLine[4])!
+                            city.latitude = Double(splitedLine[5])!
+                            city.longitude = Double(splitedLine[6])!
+                            city.metroCode = Int64(splitedLine[7])!
+                            city.areaCode = Int64(splitedLine[8])!
+                            
+                            try self.stack.context.save()
+                        }
+                        
+                    }
+                    else{
+                        Swift.print(line)
+                    }
+                }
+                complition(true)
+            }
+            catch
+            {
+                Swift.print("\(error) -> \(#function)")
+                complition(false)
+            }
+            
+            
+            
+        })
+    
+        
     }
     
     
