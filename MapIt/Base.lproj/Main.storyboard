@@ -361,6 +361,12 @@
                                                 <action selector="clearDBWasPressed:" target="mXd-rW-8n3" id="K8B-ZU-hu5"/>
                                             </connections>
                                         </menuItem>
+                                        <menuItem title="Clear Bad Cities" id="naD-FJ-BRa">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="clearBadCitiesWasPressed:" target="mXd-rW-8n3" id="Pi5-vh-hm0"/>
+                                            </connections>
+                                        </menuItem>
                                     </items>
                                 </menu>
                             </menuItem>

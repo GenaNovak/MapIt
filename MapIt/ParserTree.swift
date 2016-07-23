@@ -65,7 +65,7 @@ class ParserTree: NSObject, NSCoding {
         var acc = ""
         for node in currentNode.mNextNodes{
             if node.mWord != ""{
-                acc += "\(node.mWord!)"
+                acc += "\(node.mWord ?? "")"
             }
             
             acc += " \(self.concatAllWords(node))"

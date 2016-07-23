@@ -11,6 +11,63 @@ import Cocoa
 class DataParser: NSObject {
     static let SharedInstance =  DataParser()
     var mCurrentXML : XMLRoot?
+    var mContenxtStates : [String : Int] = [:]
+    var mCurrentSentence : Int = 0
+    private var mPinnedCities : [String : String] = [:]
+    private let mUSStates = [
+        "Alabama" : "AL",
+        "Alaska" : "AK",
+        "Arizona" : "AZ",
+        "Arkansas" : "AR",
+        "California" : "CA",
+        "Colorado" : "CO",
+        "Connecticut" : "CT",
+        "Delaware" : "DE",
+        "District of Columbia" : "DC",
+        "Florida" : "FL",
+        "Georgia" : "GA",
+        "Hawaii" : "HI",
+        "Idaho" : "ID",
+        "Illinois" : "IL",
+        "Indiana" : "IN",
+        "Iowa" : "IA",
+        "Kansas" : "KS",
+        "Kentucky" : "KY",
+        "Louisiana" : "LA",
+        "Maine" : "ME",
+        "Maryland" : "MD",
+        "Massachusetts" : "MA",
+        "Michigan" : "MI",
+        "Minnesota" : "MN",
+        "Mississippi" : "MS",
+        "Missouri" : "MO",
+        "Montana" : "MT",
+        "Nebraska" : "NE",
+        "Nevada" : "NV",
+        "New Hampshire" : "NH",
+        "New Jersey" : "NJ",
+        "New Mexico" : "NM",
+        "New York" : "NY",
+        "North Carolina" : "NC",
+        "North Dakota" : "ND",
+        "Ohio" : "OH",
+        "Oklahoma" : "OK",
+        "Oregon" : "OR",
+        "Pennsylvania" : "PA",
+        "Puerto Rico" : "PR",
+        "Rhode Island" : "RI",
+        "South Carolina" : "SC",
+        "South Dakota" : "SD",
+        "Tennessee" : "TN",
+        "Texas" : "TX",
+        "Utah" : "UT",
+        "Vermont" : "VT",
+        "Virginia" : "VA",
+        "Washington" : "WA",
+        "West Virginia" : "WV",
+        "Wisconsin" : "WI",
+        "Wyoming": "WY"
+    ]
     private let XML_DATA_KEY = "XML_DATA_KEY"
     private let BOOKS_DATA_KEY = "BOOKS_DATA_KEY"
 
@@ -166,8 +223,8 @@ class DataParser: NSObject {
     }
     
     
-    final func getAllLocations()->[(String, ParserTree)]{
-        var locationTokens : [(String, ParserTree)] = []
+    final func getAllLocations()->[(String, ParserTree, Int)]{
+        var locationTokens : [(String, ParserTree, Int)] = []
         if let data = DataParser.SharedInstance.mCurrentXML{
             if let dataIn = data.mRoot{
                 if let document = dataIn.mDocument{
@@ -175,23 +232,32 @@ class DataParser: NSObject {
                         let sentenceArr = sentence.mSentences
                         for sen in sentenceArr{
                             if let tokens = sen.mTokens{
-                                var shouldSkip = false
+                                var skipCount = 0
                                 for (index,token) in tokens.mTokens.enumerate(){
-                                    if shouldSkip{
-                                        shouldSkip = false
+                                    if skipCount > 0{
+                                        skipCount -= 1
                                         continue
                                     }
                                     else if token.mNER == "LOCATION"{
-                                        if index < tokens.mTokens.count - 1{
-                                            if tokens.mTokens[index + 1].mNER == "LOCATION"{
-                                                locationTokens.append(("\(token.mWord) \(tokens.mTokens[index + 1].mWord)", sen.mParse!.mParseTree!))
-//                                                locations.append("\(token.mWord) \(tokens.mTokens[index + 1].mWord)")
-                                                shouldSkip = true
-                                                continue
+                                        var location = token.mWord
+                                        if index < tokens.mTokens.count - 1 && tokens.mTokens[index + 1].mNER == "LOCATION"{
+                                            location += " \(tokens.mTokens[index + 1].mWord)"
+                                            skipCount += 1
+                                            if index < tokens.mTokens.count - 2 && tokens.mTokens[index + 2].mNER == "LOCATION"{
+                                                location += " \(tokens.mTokens[index + 2].mWord)"
+                                                skipCount += 1
+                                                
+                                                if index < tokens.mTokens.count - 3 && tokens.mTokens[index + 3].mNER == "LOCATION"{
+                                                    
+                                                    location += " \(tokens.mTokens[index + 3].mWord)"
+                                                    skipCount += 1
+                                                }
                                             }
+                                            locationTokens.append((location, sen.mParse!.mParseTree!, sen.mID))
+                                            continue
                                         }
-                                        locationTokens.append((token.mWord, sen.mParse!.mParseTree!))
-//                                        locations.append(token.mWord)
+                                        locationTokens.append((token.mWord, sen.mParse!.mParseTree!, sen.mID))
+                                        //                                        locations.append(token.mWord)
                                     }
                                 }
                             }
@@ -203,23 +269,36 @@ class DataParser: NSObject {
         
         return locationTokens
         
+
+    }
+    
+    
+    func getContext() -> [String]{
+        return Array(self.mContenxtStates.keys)
+    }
+    
+    func updateContextState(StateName name : String, SentenceNum num : Int){
+        if num - self.mCurrentSentence > 50{
+            self.mContenxtStates.removeAll()
+        }
+        if let initials = self.mUSStates[name]{
+            if let contextState = self.mContenxtStates[initials]{
+                self.mContenxtStates[initials] = contextState + 1
+            }
+            else{
+                self.mContenxtStates[initials] = 1
+            }
+        }
         
-//        var locationsArr : [String] = []
-//        for tokenArr in locationTokens{
-//            var locationName = ""
-//            
-//            for token in tokenArr{
-//                if locationName == ""{
-//                    locationName = token.mWord
-//                }
-//                else{
-//                    locationName = "\(locationName) \(token.mWord)"
-//                }
-//            }
-//            locationsArr.append(locationName)
-//        }
-//        
-//        return locationsArr
+        self.mCurrentSentence = num
+        
+    }
+    
+    func addToPinnedCities(CityName name : String) -> Bool{
+        let isAlreadyPinned = self.mPinnedCities[name] != nil
+        self.mPinnedCities[name] = name
+        return isAlreadyPinned
+        
     }
 
 }

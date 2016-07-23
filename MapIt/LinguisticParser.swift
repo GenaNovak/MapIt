@@ -11,7 +11,7 @@ import Cocoa
 class LinguisticParser: NSObject {
     static let SharedInstance =  LinguisticParser()
 
-    private let mSelfDescribeWords = ["I", "Me", "me", "We", "we", "Us", "us"]
+    private let mSelfDescribeWords = ["I", "Me", "me", "We", "we", "Us", "us", "myself", "Myself"]
     
     func isSelfDescribeWord (str : String) -> Bool{
         var isSelfDescribe = false

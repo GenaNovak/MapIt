@@ -37,6 +37,7 @@
 		5D2101CF1D2F8922008597E8 /* XMLGovenor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D2101CE1D2F8922008597E8 /* XMLGovenor.swift */; };
 		5D2101D11D2F893A008597E8 /* XMLDependentIn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D2101D01D2F893A008597E8 /* XMLDependentIn.swift */; };
 		5D5854621D427D4900182A7C /* LinguisticParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D5854611D427D4900182A7C /* LinguisticParser.swift */; };
+		5D5854771D43CCDC00182A7C /* ContactsUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5D5854761D43CCDC00182A7C /* ContactsUI.framework */; };
 		5DA1F7181D2F8F8000AF31A3 /* XMLRootIn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DA1F7171D2F8F8000AF31A3 /* XMLRootIn.swift */; };
 		5DC08FA21D35510300D432D0 /* ParserNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC08FA11D35510300D432D0 /* ParserNode.swift */; };
 		5DC08FA41D35510D00D432D0 /* ParserTree.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC08FA31D35510D00D432D0 /* ParserTree.swift */; };
@@ -78,6 +79,7 @@
 		5D2101CE1D2F8922008597E8 /* XMLGovenor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XMLGovenor.swift; sourceTree = "<group>"; };
 		5D2101D01D2F893A008597E8 /* XMLDependentIn.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XMLDependentIn.swift; sourceTree = "<group>"; };
 		5D5854611D427D4900182A7C /* LinguisticParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinguisticParser.swift; sourceTree = "<group>"; };
+		5D5854761D43CCDC00182A7C /* ContactsUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ContactsUI.framework; path = System/Library/Frameworks/ContactsUI.framework; sourceTree = SDKROOT; };
 		5DA1F7171D2F8F8000AF31A3 /* XMLRootIn.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XMLRootIn.swift; sourceTree = "<group>"; };
 		5DC08FA11D35510300D432D0 /* ParserNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParserNode.swift; sourceTree = "<group>"; };
 		5DC08FA31D35510D00D432D0 /* ParserTree.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParserTree.swift; sourceTree = "<group>"; };
@@ -91,6 +93,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5D5854771D43CCDC00182A7C /* ContactsUI.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -144,6 +147,7 @@
 		5D2101901D2CD4BE008597E8 = {
 			isa = PBXGroup;
 			children = (
+				5D5854761D43CCDC00182A7C /* ContactsUI.framework */,
 				5D21019B1D2CD4BE008597E8 /* MapIt */,
 				5D21019A1D2CD4BE008597E8 /* Products */,
 			);

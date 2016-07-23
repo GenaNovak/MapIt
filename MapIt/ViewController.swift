@@ -102,7 +102,7 @@ class ViewController: NSViewController, MapItDragAndDropViewDelegate, MKMapViewD
                     let neededNode = paresePath[paresePath.count - 1]
                     var printStr = ""
                     for n in neededNode.mNextNodes[0].mNextNodes{
-                        printStr += "\(n.mWord!) "
+                        printStr += "\(n.mWord ?? "") "
                     }
                     
                     if LinguisticParser.SharedInstance.isSelfDescribeWord(printStr){
@@ -123,29 +123,44 @@ class ViewController: NSViewController, MapItDragAndDropViewDelegate, MKMapViewD
             /*****************/
             
             if isTraveledCity{
-                let cities = CoreDataManager.SharedInstance.getCity(CityName: location.0)
-                if cities.count > 0
-                {
-                    var currentCity : City?
-                    for city in cities{
-                        if city.country != nil && city.country == "\"US\"" && city.region != nil{
-                            currentCity = city
-                            break
+                let isAlreadyPinned = DataParser.SharedInstance.addToPinnedCities(CityName: location.0)
+                DataParser.SharedInstance.updateContextState(StateName: location.0, SentenceNum: location.2)
+                
+                if isAlreadyPinned == false{
+                    let context = DataParser.SharedInstance.getContext()
+                    var cities : [City] = []
+                    if context.count > 0{
+                        cities = CoreDataManager.SharedInstance.getCitiesWithContext(CityName: location.0, AndContext: context)
+                    }
+                    else{
+                        cities = CoreDataManager.SharedInstance.getCity(CityName: location.0)
+                    }
+                    
+                    if cities.count > 0
+                    {
+                        var currentCity : City?
+                        for city in cities{
+                            if city.country != nil && city.country == "\"US\"" && city.region != nil{
+                                currentCity = city
+                                break
+                            }
+                            
+                        }
+                        
+                        if currentCity != nil{
+                            
+                            self.presentCityOnMap(FromCity: currentCity!, AndDescription: location.1.description)
+                        }
+                        else{
+                            Swift.print("City not found")
                         }
                         
                     }
-                    
-                    if currentCity != nil{
-                        self.presentCityOnMap(FromCity: currentCity!, AndDescription: location.1.description)
-                    }
                     else{
-                        Swift.print("City not found")
+                        self.presentCityFromNetworkCity(FromCityLocation: location)
                     }
-                    
                 }
-                else{
-                    self.presentCityFromNetworkCity(FromCityLocation: location)
-                }
+                
                 isTraveledCity = false
             }
             
@@ -170,26 +185,56 @@ class ViewController: NSViewController, MapItDragAndDropViewDelegate, MKMapViewD
         self.mMap.addAnnotation(objectAnnotation)
     }
     
-    func presentCityFromNetworkCity(FromCityLocation location : (String, ParserTree)){
-        let request = MKLocalSearchRequest()
-        request.naturalLanguageQuery = location.0
-        let search = MKLocalSearch(request: request)
-        search.startWithCompletionHandler { response, _ in
-            guard let response = response else {
-                Swift.print("Location not found")
-                return
-            }
-            if response.mapItems.count > 0{
-                let mapItems = response.mapItems[0]
-                self.presentCity(FromCordinate: mapItems.placemark.coordinate, AndName: mapItems.name ?? "", AndDescription: location.1.description)
-            }
-            else{
-                Swift.print("No Results")
-            }
-            
-            
+    func presentCityFromNetworkCity(FromCityLocation location : (String, ParserTree, Int)){
+        if NSUserDefaults.standardUserDefaults().arrayForKey("BedResultsArr") == nil{
+           NSUserDefaults.standardUserDefaults().setObject([], forKey: "BedResultsArr")
         }
+        let bedResults = NSUserDefaults.standardUserDefaults().arrayForKey("BedResultsArr") as! [String]
+        if bedResults.contains(location.0) == false{
+            let request = MKLocalSearchRequest()
+            request.naturalLanguageQuery = location.0
+            let search = MKLocalSearch(request: request)
+            search.startWithCompletionHandler { response, _ in
+                guard let response = response else {
+                    Swift.print("Location not found \(location.0)" )
+                    return
+                }
+                if response.mapItems.count == 1{
+                    let mapItems = response.mapItems[0]
+                    
+                    do{
+                        let regx = try NSRegularExpression(pattern: "\\b\(location.0)\\b", options: .CaseInsensitive)
+                        let matchings = regx.matchesInString(mapItems.name!, options: NSMatchingOptions.ReportCompletion, range: NSMakeRange(0, mapItems.name!.characters.count))
+                        if matchings.count > 0 {
+                            if location.0 == "Rio Grande river"{
+                                Swift.print("here")
+                            }
+                            self.presentCity(FromCordinate: mapItems.placemark.coordinate, AndName: mapItems.name ?? "", AndDescription: location.1.description)
+                            Swift.print("\(location.0) VS \(mapItems.name)")
+                        }
+                        else{
+                            Swift.print("Regex no match")
+                        }
+                    }
+                    catch{
+                        Swift.print(error)
+                    }
+                    
+                    
+                }
+                else{
+                    var bedResults = NSUserDefaults.standardUserDefaults().arrayForKey("BedResultsArr") as! [String]
+                    bedResults.append(location.0)
+                    NSUserDefaults.standardUserDefaults().setObject(bedResults, forKey: "BedResultsArr")
+                    NSUserDefaults.standardUserDefaults().synchronize()
+                    Swift.print("More than one result \(location.0)")
+                }
+                
+                
+            }
 
+        }
+        
     }
     
     

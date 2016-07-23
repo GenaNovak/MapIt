@@ -10,44 +10,76 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MapIt/CoreDataManager.swift"
-            timestampString = "489768325.082038"
+            timestampString = "490966426.078341"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "67"
-            endingLineNumber = "67"
-            landmarkName = "initDBFromCSV(CSVPath:complition:)"
+            startingLineNumber = "45"
+            endingLineNumber = "45"
+            landmarkName = "getCitiesWithContext(CityName:AndContext:)"
+            landmarkType = "5">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "MapIt.CoreDataManager.getCitiesWithContext (CityName : Swift.String, AndContext : Swift.Array&lt;Swift.String&gt;) -&gt; Swift.Array&lt;MapIt.City&gt;"
+                  moduleName = "MapIt"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/novakgena/OneDrive/OSX%20Dev/MapIt/MapIt/CoreDataManager.swift"
+                  timestampString = "490987626.844758"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "45"
+                  endingLineNumber = "45"
+                  offsetFromSymbolStart = "1207">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "MapIt.CoreDataManager.(getCitiesWithContext (CityName : Swift.String, AndContext : Swift.Array&lt;Swift.String&gt;) -&gt; Swift.Array&lt;MapIt.City&gt;).(closure #1)"
+                  moduleName = "MapIt"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/novakgena/OneDrive/OSX%20Dev/MapIt/MapIt/CoreDataManager.swift"
+                  timestampString = "490987626.845039"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "46"
+                  endingLineNumber = "46"
+                  offsetFromSymbolStart = "26">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MapIt/CoreDataManager.swift"
+            timestampString = "490969430.582411"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "49"
+            endingLineNumber = "49"
+            landmarkName = "getCitiesWithContext(CityName:AndContext:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "MapIt/ViewController.swift"
-            timestampString = "490948850.912453"
+            filePath = "MapIt/CoreDataManager.swift"
+            timestampString = "490987651.356498"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "187"
-            endingLineNumber = "187"
-            landmarkName = "presentCityFromNetworkCity(FromCityLocation:)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "MapIt/ViewController.swift"
-            timestampString = "490948850.912453"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "179"
-            endingLineNumber = "179"
-            landmarkName = "presentCityFromNetworkCity(FromCityLocation:)"
+            startingLineNumber = "44"
+            endingLineNumber = "44"
+            landmarkName = "getCitiesWithContext(CityName:AndContext:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -58,11 +90,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MapIt/ViewController.swift"
-            timestampString = "490946397.049741"
+            timestampString = "490987760.658155"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "127"
-            endingLineNumber = "127"
+            startingLineNumber = "112"
+            endingLineNumber = "112"
             landmarkName = "dataIsReady()"
             landmarkType = "5">
          </BreakpointContent>
@@ -74,11 +106,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MapIt/ViewController.swift"
-            timestampString = "490948850.912453"
+            timestampString = "490996825.260883"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "182"
-            endingLineNumber = "182"
+            startingLineNumber = "216"
+            endingLineNumber = "216"
             landmarkName = "presentCityFromNetworkCity(FromCityLocation:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -90,44 +122,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MapIt/ViewController.swift"
-            timestampString = "490948850.912453"
+            timestampString = "490996850.438446"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "178"
-            endingLineNumber = "178"
+            startingLineNumber = "210"
+            endingLineNumber = "210"
             landmarkName = "presentCityFromNetworkCity(FromCityLocation:)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "MapIt/ViewController.swift"
-            timestampString = "490947918.420606"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "142"
-            endingLineNumber = "142"
-            landmarkName = "dataIsReady()"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "MapIt/ViewController.swift"
-            timestampString = "490948402.939168"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "132"
-            endingLineNumber = "132"
-            landmarkName = "dataIsReady()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

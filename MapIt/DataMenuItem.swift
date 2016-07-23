@@ -45,6 +45,9 @@ class DataMenuItem: NSObject {
         }
     }
     
+    @IBAction func clearBadCitiesWasPressed(sender: AnyObject) {
+        NSUserDefaults.standardUserDefaults().setObject([], forKey: "BedResultsArr")
+    }
     @IBAction func openWasPressed(sender: AnyObject) {
         let myFileDialog: NSOpenPanel = NSOpenPanel()
         myFileDialog.canChooseDirectories = true
