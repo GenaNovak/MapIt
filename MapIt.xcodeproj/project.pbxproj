@@ -36,7 +36,10 @@
 		5D2101CD1D2F890B008597E8 /* XMLDependent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D2101CC1D2F890B008597E8 /* XMLDependent.swift */; };
 		5D2101CF1D2F8922008597E8 /* XMLGovenor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D2101CE1D2F8922008597E8 /* XMLGovenor.swift */; };
 		5D2101D11D2F893A008597E8 /* XMLDependentIn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D2101D01D2F893A008597E8 /* XMLDependentIn.swift */; };
+		5D5854621D427D4900182A7C /* LinguisticParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D5854611D427D4900182A7C /* LinguisticParser.swift */; };
 		5DA1F7181D2F8F8000AF31A3 /* XMLRootIn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DA1F7171D2F8F8000AF31A3 /* XMLRootIn.swift */; };
+		5DC08FA21D35510300D432D0 /* ParserNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC08FA11D35510300D432D0 /* ParserNode.swift */; };
+		5DC08FA41D35510D00D432D0 /* ParserTree.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC08FA31D35510D00D432D0 /* ParserTree.swift */; };
 		5DFABEA41D2F9F2900BD1B73 /* XMLParse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DFABEA31D2F9F2900BD1B73 /* XMLParse.swift */; };
 		5DFABEA61D2FA76F00BD1B73 /* DataParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DFABEA51D2FA76F00BD1B73 /* DataParser.swift */; };
 		5DFABEA81D2FA8DF00BD1B73 /* MapItDragAndDropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DFABEA71D2FA8DF00BD1B73 /* MapItDragAndDropView.swift */; };
@@ -74,7 +77,10 @@
 		5D2101CC1D2F890B008597E8 /* XMLDependent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XMLDependent.swift; sourceTree = "<group>"; };
 		5D2101CE1D2F8922008597E8 /* XMLGovenor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XMLGovenor.swift; sourceTree = "<group>"; };
 		5D2101D01D2F893A008597E8 /* XMLDependentIn.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XMLDependentIn.swift; sourceTree = "<group>"; };
+		5D5854611D427D4900182A7C /* LinguisticParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinguisticParser.swift; sourceTree = "<group>"; };
 		5DA1F7171D2F8F8000AF31A3 /* XMLRootIn.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XMLRootIn.swift; sourceTree = "<group>"; };
+		5DC08FA11D35510300D432D0 /* ParserNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParserNode.swift; sourceTree = "<group>"; };
+		5DC08FA31D35510D00D432D0 /* ParserTree.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParserTree.swift; sourceTree = "<group>"; };
 		5DFABEA31D2F9F2900BD1B73 /* XMLParse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XMLParse.swift; sourceTree = "<group>"; };
 		5DFABEA51D2FA76F00BD1B73 /* DataParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataParser.swift; sourceTree = "<group>"; };
 		5DFABEA71D2FA8DF00BD1B73 /* MapItDragAndDropView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapItDragAndDropView.swift; sourceTree = "<group>"; };
@@ -165,6 +171,7 @@
 				5D2101A51D2CD4BE008597E8 /* Info.plist */,
 				5DFABEA51D2FA76F00BD1B73 /* DataParser.swift */,
 				5DFABEA71D2FA8DF00BD1B73 /* MapItDragAndDropView.swift */,
+				5D5854611D427D4900182A7C /* LinguisticParser.swift */,
 			);
 			path = MapIt;
 			sourceTree = "<group>";
@@ -172,6 +179,7 @@
 		5D2101AB1D2CD4C7008597E8 /* XML Parser */ = {
 			isa = PBXGroup;
 			children = (
+				5DC08FA01D3550B100D432D0 /* Tree Representation */,
 				5D2101AC1D2CD512008597E8 /* ParserBase.swift */,
 				5D2101AE1D2CD57D008597E8 /* XMLRoot.swift */,
 				5D2101B01D2CD5A1008597E8 /* XMLDocument.swift */,
@@ -194,6 +202,15 @@
 				5DFABEA31D2F9F2900BD1B73 /* XMLParse.swift */,
 			);
 			name = "XML Parser";
+			sourceTree = "<group>";
+		};
+		5DC08FA01D3550B100D432D0 /* Tree Representation */ = {
+			isa = PBXGroup;
+			children = (
+				5DC08FA11D35510300D432D0 /* ParserNode.swift */,
+				5DC08FA31D35510D00D432D0 /* ParserTree.swift */,
+			);
+			name = "Tree Representation";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -275,10 +292,13 @@
 				5D2101B31D2CD75D008597E8 /* XMLSentences.swift in Sources */,
 				5D2101B11D2CD5A1008597E8 /* XMLDocument.swift in Sources */,
 				5DA1F7181D2F8F8000AF31A3 /* XMLRootIn.swift in Sources */,
+				5DC08FA41D35510D00D432D0 /* ParserTree.swift in Sources */,
 				5D2101B91D2ECECF008597E8 /* XMLSentence.swift in Sources */,
 				5D2101B51D2CD778008597E8 /* XMLCoreferences.swift in Sources */,
 				5DFABEA81D2FA8DF00BD1B73 /* MapItDragAndDropView.swift in Sources */,
 				5D2101CD1D2F890B008597E8 /* XMLDependent.swift in Sources */,
+				5D5854621D427D4900182A7C /* LinguisticParser.swift in Sources */,
+				5DC08FA21D35510300D432D0 /* ParserNode.swift in Sources */,
 				5D21019F1D2CD4BE008597E8 /* ViewController.swift in Sources */,
 				5D2101D11D2F893A008597E8 /* XMLDependentIn.swift in Sources */,
 				5DFABEA41D2F9F2900BD1B73 /* XMLParse.swift in Sources */,

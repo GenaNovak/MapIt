@@ -67,7 +67,7 @@
                                         </menuItem>
                                         <menuItem title="Open…" keyEquivalent="o" id="IAo-SY-fd9">
                                             <connections>
-                                                <action selector="openDocument:" target="Ady-hI-5gd" id="bVn-NM-KNZ"/>
+                                                <action selector="openWasPressed:" target="mXd-rW-8n3" id="cfR-yX-cB2"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem title="Open Recent" id="tXI-mr-wws">
@@ -353,6 +353,12 @@
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="initDBWasPressed:" target="mXd-rW-8n3" id="NlC-ea-vm4"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Clear DB" id="VQj-Rx-xwI">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="clearDBWasPressed:" target="mXd-rW-8n3" id="K8B-ZU-hu5"/>
                                             </connections>
                                         </menuItem>
                                     </items>

@@ -21,30 +21,33 @@ class CoreDataManager: NSObject{
     
     
     
-    final func getAllCities(){
+    final func getAllCities() -> [City]{
         do{
             let request = NSFetchRequest(entityName: "City")
-            request.sortDescriptors = [NSSortDescriptor(key: "dateCreated", ascending: false)]
+            request.sortDescriptors = [NSSortDescriptor(key: "locId", ascending: false)]
         
-            try self.stack.context.executeRequest(request)
+            let cities = try self.stack.context.executeFetchRequest(request) as! [City]
+            return cities
         }
         catch{
             Swift.print("\(error) \(#function)")
         }
         
+        return []
     }
     
-    final func getCity(CityName name : String) -> NSPersistentStoreResult?{
+    final func getCity(CityName name : String) -> [City]{
         do {
             let request = NSFetchRequest(entityName: "City")
-            request.predicate = NSPredicate(format: "name=\(name)")
-            request.sortDescriptors = [NSSortDescriptor(key: "dateCreated", ascending: false)]
-            let results = try self.stack.context.executeRequest(request)
+            request.predicate = NSPredicate(format: "city == %@", "\"\(name)\"")
+            request.sortDescriptors = [NSSortDescriptor(key: "locId", ascending: false)]
+            let results = try self.stack.context.executeFetchRequest(request) as! [City]
             return results
         }catch{
             Swift.print("\(error) -> \(#function)")
         }
-        return nil
+        return []
+        
     }
     
     final func initDBFromCSV(CSVPath path : String, complition : (Bool) -> ()){
@@ -54,21 +57,21 @@ class CoreDataManager: NSObject{
             
             do{
                 
-                let content = try String(contentsOfFile: path, encoding: NSUTF8StringEncoding)
+                let content = try String(contentsOfFile: path, encoding: NSMacOSRomanStringEncoding)
                 let splitedFileContent = content.componentsSeparatedByString("\n")
                 for line in splitedFileContent{
                     let splitedLine = line.componentsSeparatedByString(",")
                     if splitedLine.count > 8{
                         if let city = NSEntityDescription.insertNewObjectForEntityForName("City", inManagedObjectContext: self.stack.context) as? City{
-                            city.locId = Int64(splitedLine[0])!
+                            city.locId = Int64(splitedLine[0]) ?? -1
                             city.country = splitedLine[1]
                             city.region = splitedLine[2]
-                            city.country = splitedLine[3]
-                            city.postalCode = Int64(splitedLine[4])!
-                            city.latitude = Double(splitedLine[5])!
-                            city.longitude = Double(splitedLine[6])!
-                            city.metroCode = Int64(splitedLine[7])!
-                            city.areaCode = Int64(splitedLine[8])!
+                            city.city = splitedLine[3]
+                            city.postalCode = Int64(splitedLine[4]) ?? -1
+                            city.latitude = Double(splitedLine[5]) ?? -1
+                            city.longitude = Double(splitedLine[6]) ?? -1
+                            city.metroCode = Int64(splitedLine[7]) ?? -1
+                            city.areaCode = Int64(splitedLine[8]) ?? -1
                             
                             try self.stack.context.save()
                         }
@@ -85,13 +88,22 @@ class CoreDataManager: NSObject{
                 Swift.print("\(error) -> \(#function)")
                 complition(false)
             }
-            
-            
-            
         })
     
-        
     }
     
+    final func clearDB(WithComplition complition : (Bool) -> ()){
+        let fetchRequest = NSFetchRequest(entityName: "City")
+        let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+        
+        do {
+            try self.stack.context.executeRequest(deleteRequest)
+//            try self.stack.coordinator.executeRequest(deleteRequest, withContext: self.stack.context)
+            complition(true)
+        } catch {
+            Swift.print("\(error) -> \(#function)")
+            complition(false)
+        }
+    }
     
 }

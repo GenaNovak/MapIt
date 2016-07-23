@@ -56,6 +56,7 @@ class XMLSentence: ParserBase {
     
     func parser(parser: NSXMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?){
         if elementName == "sentence"{
+            self.mParse?.mParseTree = self.mParse?.initilizeParseTree(self.mParse?.mParse ?? "")
             parser.delegate = self.parent
         }
     }
@@ -63,6 +64,7 @@ class XMLSentence: ParserBase {
     override init() {
         super.init()
     }
+    
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)

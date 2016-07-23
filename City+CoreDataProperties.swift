@@ -23,5 +23,7 @@ extension City {
     @NSManaged var longitude: Double
     @NSManaged var metroCode: Int64
     @NSManaged var areaCode: Int64
+    
+    
 
 }

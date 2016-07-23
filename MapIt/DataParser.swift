@@ -164,5 +164,62 @@ class DataParser: NSObject {
         }
         NSUserDefaults.standardUserDefaults().synchronize()
     }
+    
+    
+    final func getAllLocations()->[(String, ParserTree)]{
+        var locationTokens : [(String, ParserTree)] = []
+        if let data = DataParser.SharedInstance.mCurrentXML{
+            if let dataIn = data.mRoot{
+                if let document = dataIn.mDocument{
+                    if let sentence = document.mSentences{
+                        let sentenceArr = sentence.mSentences
+                        for sen in sentenceArr{
+                            if let tokens = sen.mTokens{
+                                var shouldSkip = false
+                                for (index,token) in tokens.mTokens.enumerate(){
+                                    if shouldSkip{
+                                        shouldSkip = false
+                                        continue
+                                    }
+                                    else if token.mNER == "LOCATION"{
+                                        if index < tokens.mTokens.count - 1{
+                                            if tokens.mTokens[index + 1].mNER == "LOCATION"{
+                                                locationTokens.append(("\(token.mWord) \(tokens.mTokens[index + 1].mWord)", sen.mParse!.mParseTree!))
+//                                                locations.append("\(token.mWord) \(tokens.mTokens[index + 1].mWord)")
+                                                shouldSkip = true
+                                                continue
+                                            }
+                                        }
+                                        locationTokens.append((token.mWord, sen.mParse!.mParseTree!))
+//                                        locations.append(token.mWord)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        return locationTokens
+        
+        
+//        var locationsArr : [String] = []
+//        for tokenArr in locationTokens{
+//            var locationName = ""
+//            
+//            for token in tokenArr{
+//                if locationName == ""{
+//                    locationName = token.mWord
+//                }
+//                else{
+//                    locationName = "\(locationName) \(token.mWord)"
+//                }
+//            }
+//            locationsArr.append(locationName)
+//        }
+//        
+//        return locationsArr
+    }
 
 }
