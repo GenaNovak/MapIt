@@ -109,7 +109,7 @@ class ViewController: NSViewController, MapItDragAndDropViewDelegate, MKMapViewD
                         isTraveledCity = true
                     }
                     else{
-                        Swift.print("\(printStr) ------------------ \(location.1.description)" )
+                        Swift.print("\(location.0) -> \(printStr) ------------------ \(location.1.description)" )
                     }
                 }
                 else{
@@ -140,7 +140,7 @@ class ViewController: NSViewController, MapItDragAndDropViewDelegate, MKMapViewD
                     {
                         var currentCity : City?
                         for city in cities{
-                            if city.country != nil && city.country == "\"US\"" && city.region != nil{
+                            if city.country != nil  && city.region != nil{
                                 currentCity = city
                                 break
                             }
