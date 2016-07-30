@@ -1,0 +1,8 @@
+CLANG_ENABLE_MODULES = YES
+CLANG_ENABLE_OBJC_ARC = YES
+FRAMEWORK_SEARCH_PATHS = $(inherited) "${PODS_ROOT}/ArcGIS-Runtime-SDK-OSX"
+GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
+HEADER_SEARCH_PATHS = $(inherited) "${PODS_ROOT}/Headers/Public" "${PODS_ROOT}/Headers/Public/ArcGIS-Runtime-SDK-OSX"
+OTHER_CFLAGS = $(inherited) -isystem "${PODS_ROOT}/Headers/Public" -isystem "${PODS_ROOT}/Headers/Public/ArcGIS-Runtime-SDK-OSX"
+OTHER_LDFLAGS = $(inherited) -ObjC -l"c++" -framework "ArcGIS"
+PODS_ROOT = ${SRCROOT}/Pods

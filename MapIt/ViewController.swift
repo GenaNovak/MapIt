@@ -9,18 +9,35 @@
 import Cocoa
 import MapKit
 import AddressBook
+import CoreLocation
+import ArcGIS
 
-class ViewController: NSViewController, MapItDragAndDropViewDelegate, MKMapViewDelegate{
+
+class ViewController: NSViewController, MapItDragAndDropViewDelegate, MKMapViewDelegate, AGSLocatorDelegate, NSApplicationDelegate{
     @IBOutlet var mMap: MKMapView!
     @IBOutlet var mDragAndDropView: MapItDragAndDropView!
+    @IBOutlet var mMapView: AGSMapView!
 
     @IBOutlet var mActivityIndecator: NSProgressIndicator!
+    
+    var mLocator : AGSLocator?
+    
+    
+    func applicationDidFinishLaunching(notification: NSNotification) {
+        //Create an instance of a tiled map service layer
+        let tiledLayer = AGSTiledMapServiceLayer(URL: NSURL(string: "http://services.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer"))
+        
+        //Add it to the map view
+        self.mMapView.addMapLayer(tiledLayer, withName: "Basemap Tiled Layer")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.wantsLayer = true
         self.mDragAndDropView.delegate = self
         self.mMap.delegate = self
+        self.mLocator = AGSLocator()
+        self.mLocator?.delegate = self
 
         
         // Do any additional setup after loading the view.
@@ -91,6 +108,9 @@ class ViewController: NSViewController, MapItDragAndDropViewDelegate, MKMapViewD
         
         for location in locations{
         
+        
+        
+        
             /*****************/
             
             var isTraveledCity = false
@@ -123,6 +143,12 @@ class ViewController: NSViewController, MapItDragAndDropViewDelegate, MKMapViewD
             /*****************/
             
             if isTraveledCity{
+                
+                self.findWithLocator(Name: location.0)
+                isTraveledCity = false
+                continue
+                
+                
                 let isAlreadyPinned = DataParser.SharedInstance.addToPinnedCities(CityName: location.0)
                 DataParser.SharedInstance.updateContextState(StateName: location.0, SentenceNum: location.2)
                 
@@ -206,9 +232,6 @@ class ViewController: NSViewController, MapItDragAndDropViewDelegate, MKMapViewD
                         let regx = try NSRegularExpression(pattern: "\\b\(location.0)\\b", options: .CaseInsensitive)
                         let matchings = regx.matchesInString(mapItems.name!, options: NSMatchingOptions.ReportCompletion, range: NSMakeRange(0, mapItems.name!.characters.count))
                         if matchings.count > 0 {
-                            if location.0 == "Rio Grande river"{
-                                Swift.print("here")
-                            }
                             self.presentCity(FromCordinate: mapItems.placemark.coordinate, AndName: mapItems.name ?? "", AndDescription: location.1.description)
                             Swift.print("\(location.0) VS \(mapItems.name)")
                         }
@@ -272,6 +295,54 @@ class ViewController: NSViewController, MapItDragAndDropViewDelegate, MKMapViewD
         
         
         return pinView
+    }
+    
+    
+    func forwardGeocoding(address: String) {
+        CLGeocoder().geocodeAddressString(address, completionHandler: { (placemarks, error) in
+            if error != nil {
+                print(error)
+                return
+            }
+            if placemarks?.count > 0 {
+                let placemark = placemarks?[0]
+                let location = placemark?.location
+                let coordinate = location?.coordinate
+                print("\nlat: \(coordinate!.latitude), long: \(coordinate!.longitude)")
+                if placemark?.areasOfInterest?.count > 0 {
+                    let areaOfInterest = placemark!.areasOfInterest![0]
+                    print(areaOfInterest)
+                } else {
+                    print("No area of interest found.")
+                }
+            }
+        })
+    }
+    
+    
+    func findWithLocator(Name name : String){
+        //setup find parameters
+        
+        let findParams : AGSLocatorFindParameters = AGSLocatorFindParameters()
+        
+        findParams.outFields = ["*"]
+//        findParams.outSpatialReference = self.mMap;
+        findParams.text = name;
+    
+        
+        //execute find
+        self.mLocator?.findWithParameters(findParams)
+    }
+    
+    func locator(locator: AGSLocator!, operation op: NSOperation!, didFind results: [AnyObject]!) {
+        Swift.print("here")
+        let center = (results[0] as? AGSLocatorFindResult)?.extent.center
+    
+        self.presentCity(FromCordinate: MKCoordinateForMapPoint(MKMapPointMake(center!.x, center!.y)), AndName: results[0].name, AndDescription: "test")
+    }
+    
+    func locator(locator: AGSLocator!, operation op: NSOperation!, didFailToFindWithError error: NSError!) {
+        Swift.print("fail")
     }
     
     

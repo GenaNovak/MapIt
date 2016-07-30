@@ -1,0 +1,10 @@
+PODS:
+  - ArcGIS-Runtime-SDK-OSX (10.2.4)
+
+DEPENDENCIES:
+  - ArcGIS-Runtime-SDK-OSX
+
+SPEC CHECKSUMS:
+  ArcGIS-Runtime-SDK-OSX: c14e99d4b89a2f1d1a4063dc9c9fb5babcdada6a
+
+COCOAPODS: 0.39.0

@@ -706,6 +706,9 @@
                                     <progressIndicator hidden="YES" wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" bezeled="NO" indeterminate="YES" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="Tjm-Ca-sdO">
                                         <rect key="frame" x="224" y="119" width="32" height="32"/>
                                     </progressIndicator>
+                                    <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7wU-Jn-a5L" customClass="AGSMapView">
+                                        <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
+                                    </customView>
                                 </subviews>
                                 <constraints>
                                     <constraint firstItem="Tjm-Ca-sdO" firstAttribute="centerX" secondItem="6qq-q9-YHo" secondAttribute="centerX" id="0iq-Ye-tlh"/>
@@ -728,6 +731,7 @@
                         <outlet property="mActivityIndecator" destination="Tjm-Ca-sdO" id="rvD-Je-afJ"/>
                         <outlet property="mDragAndDropView" destination="6qq-q9-YHo" id="4R1-yt-YT0"/>
                         <outlet property="mMap" destination="Dps-lG-Dpb" id="wND-G3-nJj"/>
+                        <outlet property="mMapView" destination="7wU-Jn-a5L" id="nII-Ag-Jf9"/>
                     </connections>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
