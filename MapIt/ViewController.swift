@@ -89,13 +89,6 @@ class ViewController: NSViewController, MapItDragAndDropViewDelegate, MKMapViewD
         }
     }
     
-    private func updateNumberOfLocationsLeft(ToAdd add : Int){
-        self.mNumberOfLocationLeft += add
-        print("number of left : \(self.mNumberOfLocationLeft)")
-        if self.mNumberOfLocationLeft == 0{
-            MapItSummery.SharedInstance.printSummary()
-        }
-    }
     
     func delay(delay:Double, closure:()->()) {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW,Int64(delay * Double(NSEC_PER_SEC))),dispatch_get_main_queue(), closure)
@@ -151,8 +144,6 @@ class ViewController: NSViewController, MapItDragAndDropViewDelegate, MKMapViewD
                     let context = DataParser.SharedInstance.getContext()
                     if context.count > 0{
                     
-                        self.updateNumberOfLocationsLeft(ToAdd: 1)
-//                        delay(Double(index) * 2, closure: {
                         
                             var locationName = DataParser.SharedInstance.getState(FromInitials: location.0)
                             var contenxtName = context[0]
@@ -170,7 +161,6 @@ class ViewController: NSViewController, MapItDragAndDropViewDelegate, MKMapViewD
 //                        })
                     }
                     else{
-                        self.updateNumberOfLocationsLeft(ToAdd: 1)
                         self.locationSearchQue.append({
                             self.findLocation(FromCityLocation:  ((DataParser.SharedInstance.getState(FromInitials: location.0) ?? location.0), location.1, location.2), WithCompiltion: {
                                     self.startNextLocationSearch(FromIndex: index)
@@ -224,7 +214,6 @@ class ViewController: NSViewController, MapItDragAndDropViewDelegate, MKMapViewD
         objectAnnotation.title = cityName
         objectAnnotation.subtitle = description
         self.mMap.addAnnotation(objectAnnotation)
-        self.updateNumberOfLocationsLeft(ToAdd: -1)
         
     }
     
@@ -241,7 +230,6 @@ class ViewController: NSViewController, MapItDragAndDropViewDelegate, MKMapViewD
                 guard let response = response else {
                     MapItSummery.SharedInstance.addBadResult(BadResult: location.0, Sentence: location.1.description)
                     Swift.print("Location not found \(location.0)" )
-                    self.updateNumberOfLocationsLeft(ToAdd: -1)
                     complition()
                     return
                 }
@@ -257,14 +245,12 @@ class ViewController: NSViewController, MapItDragAndDropViewDelegate, MKMapViewD
                             complition()
                         }
                         else{
-                            self.updateNumberOfLocationsLeft(ToAdd: -1)
                             MapItSummery.SharedInstance.addBadResult(BadResult: location.0, Sentence: location.1.description)
                             Swift.print("Regex no match")
                             complition()
                         }
                     }
                     catch{
-                        self.updateNumberOfLocationsLeft(ToAdd: -1)
                         MapItSummery.SharedInstance.addBadResult(BadResult: location.0, Sentence: location.1.description)
                         Swift.print(error)
                         complition()
@@ -273,7 +259,6 @@ class ViewController: NSViewController, MapItDragAndDropViewDelegate, MKMapViewD
                     
                 }
                 else{
-                    self.updateNumberOfLocationsLeft(ToAdd: -1)
                     MapItSummery.SharedInstance.addBadResult(BadResult: location.0, Sentence: location.1.description)
                     var bedResults = NSUserDefaults.standardUserDefaults().arrayForKey("BedResultsArr") as! [String]
                     bedResults.append(location.0)
@@ -288,7 +273,6 @@ class ViewController: NSViewController, MapItDragAndDropViewDelegate, MKMapViewD
 
         }
         else{
-            self.updateNumberOfLocationsLeft(ToAdd: -1)
             complition()
         }
         
@@ -353,7 +337,6 @@ class ViewController: NSViewController, MapItDragAndDropViewDelegate, MKMapViewD
                     guard response?.status == GooglePlaces.StatusCode.OK else {
                         // Status Code is Not OK
                         debugPrint(response?.errorMessage)
-                        self.updateNumberOfLocationsLeft(ToAdd: -1)
                         complition()
                         return
                     }

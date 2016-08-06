@@ -89,15 +89,15 @@ class MapItSummery: NSObject {
         let title = "#################### \(name) ####################\n\n"
         let sentencesHeader = "########## Sentences ##########\n"
         var sentencesBody = ""
-        for sentence in data.Sentences{
-            sentencesBody += "\(sentence)\n"
+        for (index, sentence) in data.Sentences.enumerate(){
+            sentencesBody += "\(index + 1). \(sentence)\n"
         }
         sentencesBody += "\n"
         
         let mapResultsHeader = "########## Map Results ##########\n"
         var mapResultsBody = ""
-        for res in data.MapResults{
-            mapResultsBody += "\(res)\n"
+        for (index, res) in data.MapResults.enumerate(){
+            mapResultsBody += "\(index + 1). \(res)\n"
         }
         
         mapResultsBody += "\n\n\n"
@@ -109,8 +109,8 @@ class MapItSummery: NSObject {
         let title = "#################### \(name) ####################\n\n"
         let sentencesHeader = "########## Sentences ##########\n"
         var sentencesBody = ""
-        for sentence in sentences{
-            sentencesBody += "\(sentence)\n"
+        for (index, sentence) in sentences.enumerate(){
+            sentencesBody += "\(index + 1). \(sentence)\n"
         }
         
         sentencesBody += "\n\n\n"

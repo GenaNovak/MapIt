@@ -90,11 +90,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MapIt/ViewController.swift"
-            timestampString = "492170988.491557"
+            timestampString = "492184144.022926"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "125"
-            endingLineNumber = "125"
+            startingLineNumber = "118"
+            endingLineNumber = "118"
             landmarkName = "dataIsReady()"
             landmarkType = "5">
          </BreakpointContent>
