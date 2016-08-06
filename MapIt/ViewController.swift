@@ -11,36 +11,28 @@ import MapKit
 import AddressBook
 import CoreLocation
 import ArcGIS
+import GooglePlacesAPI
 
 
-class ViewController: NSViewController, MapItDragAndDropViewDelegate, MKMapViewDelegate, AGSLocatorDelegate, NSApplicationDelegate{
+class ViewController: NSViewController, MapItDragAndDropViewDelegate, MKMapViewDelegate{
     @IBOutlet var mMap: MKMapView!
     @IBOutlet var mDragAndDropView: MapItDragAndDropView!
-    @IBOutlet var mMapView: AGSMapView!
 
     @IBOutlet var mActivityIndecator: NSProgressIndicator!
+    private var mNumberOfLocationLeft : Int = 0
+    private var searchCount = 0
+    private var locationSearchQue : [ () -> ()] = []
+    private var mTaskExecutionTime : NSTimer?
     
-    var mLocator : AGSLocator?
     
     
-    func applicationDidFinishLaunching(notification: NSNotification) {
-        //Create an instance of a tiled map service layer
-        let tiledLayer = AGSTiledMapServiceLayer(URL: NSURL(string: "http://services.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer"))
-        
-        //Add it to the map view
-        self.mMapView.addMapLayer(tiledLayer, withName: "Basemap Tiled Layer")
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.wantsLayer = true
         self.mDragAndDropView.delegate = self
         self.mMap.delegate = self
-        self.mLocator = AGSLocator()
-        self.mLocator?.delegate = self
-
-        
-        // Do any additional setup after loading the view.
+        GooglePlaces.provideAPIKey("AIzaSyC9lhUCQev5dKWvvMoTYykSABGHKqIsk-o")
     }
 
     override func viewWillAppear() {
@@ -48,11 +40,7 @@ class ViewController: NSViewController, MapItDragAndDropViewDelegate, MKMapViewD
         self.mDragAndDropView.layer?.backgroundColor = NSColor.whiteColor().CGColor
         self.mDragAndDropView.alphaValue = 0.8
     }
-    override var representedObject: AnyObject? {
-        didSet {
-        // Update the view, if already loaded.
-        }
-    }
+
     
     //MARK: MapItDragAndDropViewDelegate
     func dragOperationDone(filePath path : String) {
@@ -101,13 +89,25 @@ class ViewController: NSViewController, MapItDragAndDropViewDelegate, MKMapViewD
         }
     }
     
+    private func updateNumberOfLocationsLeft(ToAdd add : Int){
+        self.mNumberOfLocationLeft += add
+        print("number of left : \(self.mNumberOfLocationLeft)")
+        if self.mNumberOfLocationLeft == 0{
+            MapItSummery.SharedInstance.printSummary()
+        }
+    }
+    
+    func delay(delay:Double, closure:()->()) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW,Int64(delay * Double(NSEC_PER_SEC))),dispatch_get_main_queue(), closure)
+    }
     
     private func dataIsReady(){
         let locations = DataParser.SharedInstance.getAllLocations()
         
+        MapItSummery.SharedInstance.updateNumberOfFoundLocations(NumOfFoundLocations: locations.count)
+        debugPrint("number of locations \(locations.count)")
         
-        for location in locations{
-        
+        for (index,location) in locations.enumerate(){
         
         
         
@@ -129,67 +129,82 @@ class ViewController: NSViewController, MapItDragAndDropViewDelegate, MKMapViewD
                         isTraveledCity = true
                     }
                     else{
-                        Swift.print("\(location.0) -> \(printStr) ------------------ \(location.1.description)" )
+                        MapItSummery.SharedInstance.addBadResult(BadResult: location.0, Sentence: location.1.description)
                     }
                 }
                 else{
-                   Swift.print("S Not found")
+                   MapItSummery.SharedInstance.addBadResult(BadResult: location.0, Sentence: location.1.description)
                 }
                 
             }
             else{
-                Swift.print("node Not found \(locationArr[0])")
+                MapItSummery.SharedInstance.addBadResult(BadResult: location.0, Sentence: location.1.description)
             }
             /*****************/
             
             if isTraveledCity{
-                
-                self.findWithLocator(Name: location.0)
-                isTraveledCity = false
-                continue
-                
                 
                 let isAlreadyPinned = DataParser.SharedInstance.addToPinnedCities(CityName: location.0)
                 DataParser.SharedInstance.updateContextState(StateName: location.0, SentenceNum: location.2)
                 
                 if isAlreadyPinned == false{
                     let context = DataParser.SharedInstance.getContext()
-                    var cities : [City] = []
                     if context.count > 0{
-                        cities = CoreDataManager.SharedInstance.getCitiesWithContext(CityName: location.0, AndContext: context)
+                    
+                        self.updateNumberOfLocationsLeft(ToAdd: 1)
+//                        delay(Double(index) * 2, closure: {
+                        
+                            var locationName = DataParser.SharedInstance.getState(FromInitials: location.0)
+                            var contenxtName = context[0]
+                            if locationName == nil{
+                                locationName = location.0
+                                contenxtName = DataParser.SharedInstance.getState(FromInitials: context[0]) ?? context[0]
+                            }
+                        self.locationSearchQue.append({
+                            self.findLocation(FromCityLocation: (locationName!, location.1, location.2), andContext: contenxtName, WithCompiltion: {
+                                
+                                    self.startNextLocationSearch(FromIndex: index)
+                            })
+                        })
+                        
+//                        })
                     }
                     else{
-                        cities = CoreDataManager.SharedInstance.getCity(CityName: location.0)
+                        self.updateNumberOfLocationsLeft(ToAdd: 1)
+                        self.locationSearchQue.append({
+                            self.findLocation(FromCityLocation:  ((DataParser.SharedInstance.getState(FromInitials: location.0) ?? location.0), location.1, location.2), WithCompiltion: {
+                                    self.startNextLocationSearch(FromIndex: index)
+                                
+                            })
+                        })
+
+                        
                     }
                     
-                    if cities.count > 0
-                    {
-                        var currentCity : City?
-                        for city in cities{
-                            if city.country != nil  && city.region != nil{
-                                currentCity = city
-                                break
-                            }
-                            
-                        }
-                        
-                        if currentCity != nil{
-                            
-                            self.presentCityOnMap(FromCity: currentCity!, AndDescription: location.1.description)
-                        }
-                        else{
-                            Swift.print("City not found")
-                        }
-                        
-                    }
-                    else{
-                        self.presentCityFromNetworkCity(FromCityLocation: location)
-                    }
+
+                }
+                else{
+                    MapItSummery.SharedInstance.addFoundLocation(Location: location.0, Sentences: location.1.description, MapResults: "Allready Pinned")
                 }
                 
                 isTraveledCity = false
             }
             
+        }
+        
+        self.mTaskExecutionTime = NSTimer(timeInterval: 0.2, target: self, selector: #selector(startNextLocationSearch), userInfo: nil, repeats: true)
+        self.mTaskExecutionTime?.fire()
+//        self.startNextLocationSearch(FromIndex: 0)
+    }
+    
+    func startNextLocationSearch(FromIndex index : Int){
+        if self.locationSearchQue.count > 0{
+            self.locationSearchQue.removeFirst()()
+            
+        }
+        else{
+            self.mTaskExecutionTime?.invalidate()
+            MapItSummery.SharedInstance.printSummary()
         }
     }
     
@@ -209,9 +224,11 @@ class ViewController: NSViewController, MapItDragAndDropViewDelegate, MKMapViewD
         objectAnnotation.title = cityName
         objectAnnotation.subtitle = description
         self.mMap.addAnnotation(objectAnnotation)
+        self.updateNumberOfLocationsLeft(ToAdd: -1)
+        
     }
     
-    func presentCityFromNetworkCity(FromCityLocation location : (String, ParserTree, Int)){
+    func presentCityFromNetworkCity(FromCityLocation location : (String, ParserTree, Int), WithComplition complition : () -> ()){
         if NSUserDefaults.standardUserDefaults().arrayForKey("BedResultsArr") == nil{
            NSUserDefaults.standardUserDefaults().setObject([], forKey: "BedResultsArr")
         }
@@ -222,7 +239,10 @@ class ViewController: NSViewController, MapItDragAndDropViewDelegate, MKMapViewD
             let search = MKLocalSearch(request: request)
             search.startWithCompletionHandler { response, _ in
                 guard let response = response else {
+                    MapItSummery.SharedInstance.addBadResult(BadResult: location.0, Sentence: location.1.description)
                     Swift.print("Location not found \(location.0)" )
+                    self.updateNumberOfLocationsLeft(ToAdd: -1)
+                    complition()
                     return
                 }
                 if response.mapItems.count == 1{
@@ -232,30 +252,44 @@ class ViewController: NSViewController, MapItDragAndDropViewDelegate, MKMapViewD
                         let regx = try NSRegularExpression(pattern: "\\b\(location.0)\\b", options: .CaseInsensitive)
                         let matchings = regx.matchesInString(mapItems.name!, options: NSMatchingOptions.ReportCompletion, range: NSMakeRange(0, mapItems.name!.characters.count))
                         if matchings.count > 0 {
+                            MapItSummery.SharedInstance.addFoundLocation(Location: location.0, Sentences: location.1.description, MapResults: mapItems.name ?? "")
                             self.presentCity(FromCordinate: mapItems.placemark.coordinate, AndName: mapItems.name ?? "", AndDescription: location.1.description)
-                            Swift.print("\(location.0) VS \(mapItems.name)")
+                            complition()
                         }
                         else{
+                            self.updateNumberOfLocationsLeft(ToAdd: -1)
+                            MapItSummery.SharedInstance.addBadResult(BadResult: location.0, Sentence: location.1.description)
                             Swift.print("Regex no match")
+                            complition()
                         }
                     }
                     catch{
+                        self.updateNumberOfLocationsLeft(ToAdd: -1)
+                        MapItSummery.SharedInstance.addBadResult(BadResult: location.0, Sentence: location.1.description)
                         Swift.print(error)
+                        complition()
                     }
                     
                     
                 }
                 else{
+                    self.updateNumberOfLocationsLeft(ToAdd: -1)
+                    MapItSummery.SharedInstance.addBadResult(BadResult: location.0, Sentence: location.1.description)
                     var bedResults = NSUserDefaults.standardUserDefaults().arrayForKey("BedResultsArr") as! [String]
                     bedResults.append(location.0)
                     NSUserDefaults.standardUserDefaults().setObject(bedResults, forKey: "BedResultsArr")
                     NSUserDefaults.standardUserDefaults().synchronize()
                     Swift.print("More than one result \(location.0)")
+                    complition()
                 }
                 
                 
             }
 
+        }
+        else{
+            self.updateNumberOfLocationsLeft(ToAdd: -1)
+            complition()
         }
         
     }
@@ -298,52 +332,40 @@ class ViewController: NSViewController, MapItDragAndDropViewDelegate, MKMapViewD
     }
     
     
-    func forwardGeocoding(address: String) {
-        CLGeocoder().geocodeAddressString(address, completionHandler: { (placemarks, error) in
-            if error != nil {
-                print(error)
-                return
-            }
-            if placemarks?.count > 0 {
-                let placemark = placemarks?[0]
-                let location = placemark?.location
-                let coordinate = location?.coordinate
-                print("\nlat: \(coordinate!.latitude), long: \(coordinate!.longitude)")
-                if placemark?.areasOfInterest?.count > 0 {
-                    let areaOfInterest = placemark!.areasOfInterest![0]
-                    print(areaOfInterest)
-                } else {
-                    print("No area of interest found.")
+    func findLocation(FromCityLocation location : (String, ParserTree, Int), andContext context : String = "", WithCompiltion complition : () -> ()){
+        var input = location.0
+        if context != ""{
+            input = "\(location.0), \(context)"
+        }
+            GooglePlaces.placeAutocomplete(forInput: input ) { (response, error) in
+                //             Check Status Code
+                guard response?.status == GooglePlaces.StatusCode.OK else {
+                    // Status Code is Not OK
+                    
+                    self.presentCityFromNetworkCity(FromCityLocation: location, WithComplition: {
+                        complition()
+                    })
+                    return
                 }
+                
+                let palceID = response!.predictions.first!.place?.toString().componentsSeparatedByString(":")[1]
+                GooglePlaces.placeDetails(forPlaceID: palceID!, completion: { (response, error) in
+                    guard response?.status == GooglePlaces.StatusCode.OK else {
+                        // Status Code is Not OK
+                        debugPrint(response?.errorMessage)
+                        self.updateNumberOfLocationsLeft(ToAdd: -1)
+                        complition()
+                        return
+                    }
+                    let pinLocation : CLLocationCoordinate2D = CLLocationCoordinate2DMake(response!.result!.geometryLocation!.latitude, response!.result!.geometryLocation!.longitude)
+                    MapItSummery.SharedInstance.addFoundLocation(Location: location.0, Sentences: location.1.description, MapResults: response!.result!.name!)
+                    self.presentCity( FromCordinate: pinLocation , AndName: response!.result!.name!, AndDescription: location.1.description)
+                    complition()
+                })
             }
-        })
-    }
-    
-    
-    func findWithLocator(Name name : String){
-        //setup find parameters
         
-        let findParams : AGSLocatorFindParameters = AGSLocatorFindParameters()
-        
-        findParams.outFields = ["*"]
-//        findParams.outSpatialReference = self.mMap;
-        findParams.text = name;
-    
-        
-        //execute find
-        self.mLocator?.findWithParameters(findParams)
     }
-    
-    func locator(locator: AGSLocator!, operation op: NSOperation!, didFind results: [AnyObject]!) {
-        Swift.print("here")
-        let center = (results[0] as? AGSLocatorFindResult)?.extent.center
-    
-        self.presentCity(FromCordinate: MKCoordinateForMapPoint(MKMapPointMake(center!.x, center!.y)), AndName: results[0].name, AndDescription: "test")
-    }
-    
-    func locator(locator: AGSLocator!, operation op: NSOperation!, didFailToFindWithError error: NSError!) {
-        Swift.print("fail")
-    }
+
     
     
 

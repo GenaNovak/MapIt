@@ -71,7 +71,14 @@ class DataParser: NSObject {
     private let XML_DATA_KEY = "XML_DATA_KEY"
     private let BOOKS_DATA_KEY = "BOOKS_DATA_KEY"
 
-
+    private func reverseDictionary(FromDic dic : [String : String]) -> [String : String]{
+        var toReturn : [String : String] = [:]
+        for key in dic.keys{
+            toReturn[dic[key]!] = key
+        }
+        
+        return toReturn
+    }
     
     final func processXML(FromPath path : String, andCompletion complition: (Bool)->()){
         
@@ -278,7 +285,7 @@ class DataParser: NSObject {
     }
     
     func updateContextState(StateName name : String, SentenceNum num : Int){
-        if num - self.mCurrentSentence > 50{
+        if num - self.mCurrentSentence > 30{
             self.mContenxtStates.removeAll()
         }
         if let initials = self.mUSStates[name]{
@@ -292,6 +299,10 @@ class DataParser: NSObject {
         
         self.mCurrentSentence = num
         
+    }
+    
+    func getState(FromInitials initials : String) ->String?{
+        return self.reverseDictionary(FromDic: self.mUSStates)[initials]
     }
     
     func addToPinnedCities(CityName name : String) -> Bool{
